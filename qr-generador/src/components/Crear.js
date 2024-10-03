@@ -20,20 +20,20 @@ export const Crear = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch('http://localhost:3005/generate-qr', {
+      const response = await fetch('http://localhost:3005/api/generate-qr', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-
+  
       const result = await response.json();
       if (response.ok) {
         console.log('Respuesta del servidor:', result);
-        setQrUrl(result.filePath); // Guarda la URL o ruta del archivo QR
+        setQrUrl(result.qrFilePath); // Ajuste aquí para usar qrFilePath
         setErrorMessage(''); // Limpia el mensaje de error si la respuesta fue exitosa
       } else {
         throw new Error(result.message);
