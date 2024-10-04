@@ -102,6 +102,7 @@ export const Listado = () => {
               <p><strong>Tipo de Sangre:</strong> {alumno.tipoSangre}</p>
               <p><strong>Número de Control:</strong> {alumno.numeroControl}</p>
               <p><strong>Contacto de Emergencias:</strong> {alumno.contactoEmergencias}</p>
+              <p><strong>Numero Seguro Social:</strong> {alumno.numeroSeguro}</p>
             </div>
             <div className="imagenes">
               <div className="imagen-qr">

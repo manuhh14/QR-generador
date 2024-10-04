@@ -5,7 +5,7 @@ const path = require('path');
 const bwipjs = require('bwip-js');
 
 const generarQR = async (req, res) => {
-  const { nombreCompleto, tipoSangre, numeroControl, contactoEmergencias } = req.body;
+  const { nombreCompleto, tipoSangre, numeroControl, contactoEmergencias,numeroSeguro } = req.body;
 
   try {
     // Busca si el alumno ya existe por numeroControl
@@ -16,6 +16,7 @@ const generarQR = async (req, res) => {
       alumno.nombreCompleto = nombreCompleto || alumno.nombreCompleto;
       alumno.tipoSangre = tipoSangre || alumno.tipoSangre;
       alumno.contactoEmergencias = contactoEmergencias || alumno.contactoEmergencias;
+      alumno.numeroSeguro= numeroSeguro || alumno.numeroSeguro;
     } else {
       // Si no existe, crea un nuevo alumno
       alumno = new Alumno({
@@ -23,6 +24,7 @@ const generarQR = async (req, res) => {
         tipoSangre,
         numeroControl,
         contactoEmergencias,
+        numeroSeguro
       });
     }
 
@@ -49,7 +51,7 @@ const generarQR = async (req, res) => {
     // Genera el código de barras
     bwipjs.toBuffer({
       bcid: 'code128',
-      text: numeroControl,
+      text: numeroSeguro,
       scale: 3,
       height: 10,
       includetext: true,
@@ -103,8 +105,16 @@ const generarTodosQR = async (req, res) => {
 
     // Itera sobre cada alumno
     for (const alumno of alumnos) {
-      // Genera el código QR
-      const qrCode = await QRCode.toDataURL(JSON.stringify(alumno));
+       // Solo los campos requeridos para el código QR
+       const qrData = {
+        nombreCompleto: alumno.nombreCompleto,
+        tipoSangre: alumno.tipoSangre,
+        numeroControl: alumno.numeroControl,
+        contactoEmergencias: alumno.contactoEmergencias
+      };
+
+      // Genera el código QR con los datos seleccionados
+      const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
 
       // Almacena el código QR en el servidor
       const qrFileName = `qr-${alumno.numeroControl}.png`;
@@ -115,7 +125,7 @@ const generarTodosQR = async (req, res) => {
       // Genera el código de barras
       const barcodeBuffer = await bwipjs.toBuffer({
         bcid: 'code128',
-        text: alumno.numeroControl,
+        text: alumno.numeroSeguro,
         scale: 3,
         height: 10,
         includetext: true,

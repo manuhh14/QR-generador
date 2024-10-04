@@ -6,6 +6,7 @@ export const Crear = () => {
     tipoSangre: '',
     numeroControl: '',
     contactoEmergencias: '',
+    numeroSeguro: '',
   });
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -86,6 +87,17 @@ export const Crear = () => {
             type="text"
             name="contactoEmergencias"
             value={formData.contactoEmergencias}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Numero de Seguro Social:</label>
+          <input
+            type="text"
+            name="numeroSeguro"
+            value={formData.numeroSeguro}
             onChange={handleChange}
             required
           />
