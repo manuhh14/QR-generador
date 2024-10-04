@@ -68,8 +68,8 @@ const generarQR = async (req, res) => {
       res.json({
         message: 'Código QR, código de barras generados, y datos guardados',
         alumno: alumnoGuardado,
-        qrUrl: `/qr/${qrFileName}`,  // URL para acceder al código QR
-        barcodeUrl: `/barras/${barcodeFileName}`,  // URL para acceder al código de barras
+        qrUrl: `/qr/${qrFileName}`,  
+        barcodeUrl: `/barras/${barcodeFileName}`, 
       });
     });
 
@@ -78,16 +78,74 @@ const generarQR = async (req, res) => {
     res.status(500).json({ message: 'Error al generar el código QR o guardar los datos', error: error.message });
   }
 };
-/*Metodo para conseguir los datos alamcenados */
+
+/* Método para conseguir los datos almacenados */
 const obtenerAlumnos = async (req, res) => {
   try {
-    const alumnos = await Alumno.find(); // Obtiene todos los alumnos
-    res.json(alumnos); // Cambia esto para devolver solo el arreglo de alumnos
+    const alumnos = await Alumno.find(); 
+    res.json(alumnos); 
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener los alumnos', error });
   } 
 };
+
+/* Nuevo método para generar códigos QR y de barras para todos los alumnos */
+const generarTodosQR = async (req, res) => {
+  try {
+    const alumnos = await Alumno.find(); 
+    const resultados = [];
+
+    // Verificación de carpetas
+    const qrDir = path.join(__dirname, '../qr');
+    const barcodeDir = path.join(__dirname, '../barras');
+    if (!fs.existsSync(qrDir)) fs.mkdirSync(qrDir, { recursive: true });
+    if (!fs.existsSync(barcodeDir)) fs.mkdirSync(barcodeDir, { recursive: true });
+
+    // Itera sobre cada alumno
+    for (const alumno of alumnos) {
+      // Genera el código QR
+      const qrCode = await QRCode.toDataURL(JSON.stringify(alumno));
+
+      // Almacena el código QR en el servidor
+      const qrFileName = `qr-${alumno.numeroControl}.png`;
+      const qrFilePath = path.join(qrDir, qrFileName);
+      const base64Data = qrCode.replace(/^data:image\/png;base64,/, "");
+      fs.writeFileSync(qrFilePath, base64Data, 'base64');
+
+      // Genera el código de barras
+      const barcodeBuffer = await bwipjs.toBuffer({
+        bcid: 'code128',
+        text: alumno.numeroControl,
+        scale: 3,
+        height: 10,
+        includetext: true,
+        textxalign: 'center',
+      });
+
+      const barcodeFileName = `barcode-${alumno.numeroControl}.png`;
+      const barcodeFilePath = path.join(barcodeDir, barcodeFileName);
+      fs.writeFileSync(barcodeFilePath, barcodeBuffer);
+
+      // Guarda los resultados
+      resultados.push({
+        nombreCompleto: alumno.nombreCompleto,
+        qrUrl: `/qr/${qrFileName}`,
+        barcodeUrl: `/barras/${barcodeFileName}`
+      });
+    }
+
+    res.json({
+      message: 'Códigos QR y de barras generados para todos los alumnos',
+      resultados,
+    });
+  } catch (error) {
+    console.error('Error al generar códigos QR y de barras:', error);
+    res.status(500).json({ message: 'Error al generar los códigos QR y de barras', error: error.message });
+  }
+};
+
 module.exports = {
   generarQR,
-  obtenerAlumnos
-}
+  obtenerAlumnos,
+  generarTodosQR, 
+};
