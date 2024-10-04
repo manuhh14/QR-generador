@@ -298,3 +298,65 @@ flex-basis: 35%;
   overflow: hidden;
   box-shadow: 0px 0px 20px #ccc;
 }
+
+/* Estilos para el contenedor principal */
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas */
+  gap: 20px; /* Espacio entre columnas */
+  background-color: #f6f7f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+/* Estilos para la información del alumno */
+.alumno-info {
+  background: #ffffff; /* Fondo blanco para resaltar la información */
+  border: 1px solid #e0e0e0; /* Borde sutil */
+  border-radius: 8px;
+  padding: 15px; /* Espaciado interno */
+  font-family: Arial, sans-serif;
+}
+
+.alumno-info h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #2c3e50; /* Color más oscuro */
+}
+
+.alumno-info p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #34495e; /* Color para el texto */
+}
+
+/* Estilos para las imágenes */
+.imagenes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacio entre imágenes */
+  justify-content: center;
+  align-items: center;
+}
+
+.imagenes h4 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #2980b9; /* Color azul para los encabezados */
+}
+
+.imagenes img {
+  max-width: 150px; /* Tamaño máximo de las imágenes */
+  border: 2px solid #ccc; /* Borde claro */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Estilo para el mensaje de error */
+.error-message {
+  color: #e74c3c; /* Color rojo para mensajes de error */
+  font-weight: bold;
+  margin: 10px 0;
+}

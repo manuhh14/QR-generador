@@ -95,7 +95,7 @@ export const Crear = () => {
       </form>
 
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      {qrUrl && <img src={qrUrl} alt="Código QR generado" />}
+     {/*{qrUrl && <img src={qrUrl} alt="Código QR generado" />}*/}
     </div>
   );
 };
