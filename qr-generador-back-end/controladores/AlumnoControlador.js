@@ -109,8 +109,8 @@ const generarTodosQR = async (req, res) => {
        const qrData = {
         nombreCompleto: alumno.nombreCompleto,
         tipoSangre: alumno.tipoSangre,
-        numeroControl: alumno.numeroControl,
-        contactoEmergencias: alumno.contactoEmergencias
+        numeroDeSeguroSocial: alumno.numeroSeguro,
+        contactoEmergencias: alumno.contactoEmergencias,
       };
 
       // Genera el código QR con los datos seleccionados
@@ -125,7 +125,7 @@ const generarTodosQR = async (req, res) => {
       // Genera el código de barras
       const barcodeBuffer = await bwipjs.toBuffer({
         bcid: 'code128',
-        text: alumno.numeroSeguro,
+        text: alumno.numeroControl,
         scale: 3,
         height: 10,
         includetext: true,
